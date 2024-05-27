@@ -5,14 +5,26 @@ Backend for the [e-commerce-app](https://github.com/Diegovalen47/e-commerce-app)
 ## Installation
 
 ```bash
-$ pnpm install
-$ pnpm drizzle-kit generate
+$ pnpm install // install dependencies
+$ pnpm drizzle-kit generate // generate migrations/creation SQL files
 $ cd db
-$ docker-compose up -d
-$ pnpm tsx db/scripts/migrate.ts
+$ docker-compose up -d // start postgres and pgadmin
+$ pnpm tsx db/scripts/migrate.ts // Apply migrations/creations in the database
 $ cd ..
 
 ```
+## Run environment
+
+```bash
+$ pnpm run start:dev // start the server
+$ pnpm drizzle-kit studio // start drizzle studio
+```
+
+pgadmin: http://localhost:5050/
+drizzle studio: https://local.drizzle.studio/
+api/docs: host:port/api-docs
+
+
 
 ## Running the app
 
