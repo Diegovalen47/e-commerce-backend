@@ -18,7 +18,7 @@ export class ProductLightSerializer implements ProductLightInterface {
   rating: number;
   stock: number;
   brand: string;
-  category: string;
+  category: 'electronics' | 'clothing' | 'furniture' | 'books';
 
   @Exclude()
   description: string;
