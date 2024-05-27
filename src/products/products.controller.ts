@@ -13,6 +13,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductLightSerializer } from './serializers/product-ligth-serializer';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller({
   path: 'products',
@@ -22,17 +23,20 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @ApiTags('products')
   async create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @Get()
+  @ApiTags('products')
   async findAll(): Promise<ProductLightSerializer[]> {
     const products = await this.productsService.findAll();
     return ProductLightSerializer.fromMany(products);
   }
 
   @Get(':id')
+  @ApiTags('products')
   findOne(
     @Param(
       'id',
@@ -44,6 +48,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @ApiTags('products')
   update(
     @Param(
       'id',
@@ -56,6 +61,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @ApiTags('products')
   remove(
     @Param(
       'id',
