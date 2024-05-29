@@ -1,8 +1,10 @@
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
+import { PaginationDto, IMetadata } from 'src/common';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -15,10 +17,30 @@ export class ProductsService {
       .returning();
   }
 
-  async findAll() {
-    return this.drizzle.db
-      .select()
-      .from(this.drizzle.schema.product);
+  async findAll(paginationDto: PaginationDto) {
+
+    const totalProducts = await this.getTotalProducts();
+    const { limit, page } = paginationDto;
+    const lastPage = Math.ceil(totalProducts / limit);
+    
+    const metadata: IMetadata = {
+      total: totalProducts,
+      page,
+      lastPage
+    }
+    
+    const data: ProductEntity[] = 
+      await this.drizzle.db
+        .select()
+        .from(this.drizzle.schema.product)
+        .limit(limit)
+        .offset((page - 1) * limit)
+
+
+    return {
+      data,
+      metadata
+    };
   }
 
   findOne(id: number) {
@@ -47,5 +69,11 @@ export class ProductsService {
         eq(this.drizzle.schema.product.id, id)
       )
       .returning();
+  }
+
+  async getTotalProducts() {
+    return (
+      await this.drizzle.db.select({ count: count() }).from(this.drizzle.schema.product)
+    )[0].count;
   }
 }

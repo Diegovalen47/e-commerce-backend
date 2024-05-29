@@ -1,13 +1,13 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { IProduct, ProductEntity } from '../entities/product.entity';
 
-interface ProductLightInterface extends IProduct {
+interface IProductLight extends IProduct {
   get discountedPrice(): number;
 }
 
 const fromCentsToNormal = ({ value }: any) => Number((value / 100).toFixed(2));
 
-export class ProductLightSerializer implements ProductLightInterface {
+export class ProductLightSerializer implements IProductLight {
   id!: number;
   title!: string;
 

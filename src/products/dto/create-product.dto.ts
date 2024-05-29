@@ -1,5 +1,5 @@
 import { IProduct } from "../entities/product.entity";
-import { IsString, IsNotEmpty, IsInt, IsPositive } from "class-validator";
+import { IsString, IsNotEmpty, IsInt, IsPositive, IsIn } from "class-validator";
 
 interface CreateProductInterface extends Omit<IProduct, "id"> {}
 
@@ -33,6 +33,7 @@ export class CreateProductDto implements CreateProductInterface {
   brand!: string;
   
   @IsNotEmpty()
+  @IsIn(["electronics", "clothing", "furniture", "books"])
   category!: "electronics" | "clothing" | "furniture" | "books";
   
   @IsString()
