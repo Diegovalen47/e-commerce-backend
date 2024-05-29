@@ -5,26 +5,26 @@ interface ProductLightInterface extends IProduct {
   get discountedPrice(): number;
 }
 
-const fromCentsToNormal = ({ value }) => Number((value / 100).toFixed(2));
+const fromCentsToNormal = ({ value }: any) => Number((value / 100).toFixed(2));
 
 export class ProductLightSerializer implements ProductLightInterface {
-  id: number;
-  title: string;
+  id!: number;
+  title!: string;
 
   @Transform(fromCentsToNormal)
-  price: number;
-  discountPercentage: number;
+  price!: number;
+  discountPercentage!: number;
   @Transform(fromCentsToNormal)
-  rating: number;
-  stock: number;
-  brand: string;
-  category: 'electronics' | 'clothing' | 'furniture' | 'books';
+  rating!: number;
+  stock!: number;
+  brand!: string;
+  category!: 'electronics' | 'clothing' | 'furniture' | 'books';
 
   @Exclude()
-  description: string;
+  description!: string;
 
   @Exclude()
-  thumbnail: string;
+  thumbnail!: string;
 
   @Expose()
   get discountedPrice(): number {

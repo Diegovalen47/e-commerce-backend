@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  HttpStatus
+  HttpStatus,
+  Query
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductLightSerializer } from './serializers/product-ligth-serializer';
 import { ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/common';
 
 @Controller({
   path: 'products',
@@ -30,7 +32,7 @@ export class ProductsController {
 
   @Get()
   @ApiTags('products')
-  async findAll(): Promise<ProductLightSerializer[]> {
+  async findAll(@Query() paginationDto: PaginationDto): Promise<ProductLightSerializer[]> {
     const products = await this.productsService.findAll();
     return ProductLightSerializer.fromMany(products);
   }

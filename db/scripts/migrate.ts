@@ -1,12 +1,12 @@
 import { Client } from "pg"
 import { drizzle } from "drizzle-orm/node-postgres"
 import * as Schema from 'src/drizzle/schema'
-import { envs } from "src/config/envs"
+import { envs } from "src/config"
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 
 export async function migrateDb() {
   const client = new Client({
-    connectionString: envs.databaseURL,
+    connectionString: envs.DATABASE_URL,
   })
 
   await client.connect();

@@ -1,16 +1,16 @@
 import { Product } from 'src/drizzle/schema'
 
 export class ProductEntity implements Product {
-  id: number
-  title: string
-  brand: string
-  description: string
-  price: number
-  discountPercentage: number
-  rating: number
-  stock: number
-  category: 'electronics' | 'clothing' | 'furniture' | 'books'
-  thumbnail: string
+  id!: number;
+  title!: string | null;
+  description!: string | null;
+  brand!: string | null;
+  price!: number | null;
+  discountPercentage!: number | null;
+  rating!: number | null;
+  stock!: number | null;
+  category!: 'electronics' | 'clothing' | 'furniture' | 'books' | null;
+  thumbnail!: string | null;
 }
 
 export interface IProduct extends ProductEntity {}

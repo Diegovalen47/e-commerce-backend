@@ -6,35 +6,35 @@ interface CreateProductInterface extends Omit<IProduct, "id"> {}
 export class CreateProductDto implements CreateProductInterface {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
   
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
   
   @IsNotEmpty()
   @IsPositive()
-  price: number;
+  price!: number;
   
   @IsNotEmpty()
   @IsPositive()
-  discountPercentage: number;
+  discountPercentage!: number;
   
   @IsNotEmpty()
   @IsPositive()
-  rating: number;
+  rating!: number;
   
   @IsNotEmpty()
   @IsInt()
-  stock: number;
+  stock!: number;
   
   @IsString()
   @IsNotEmpty()
-  brand: string;
+  brand!: string;
   
   @IsNotEmpty()
-  category: "electronics" | "clothing" | "furniture" | "books";
+  category!: "electronics" | "clothing" | "furniture" | "books";
   
   @IsString()
-  thumbnail: string;
+  thumbnail!: string;
 }
