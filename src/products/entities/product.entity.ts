@@ -11,6 +11,7 @@ export class ProductEntity implements Product {
   stock!: number | null;
   category!: 'electronics' | 'clothing' | 'furniture' | 'books' | null;
   thumbnail!: string | null;
+  available!: boolean | null;
 }
 
 export interface IProduct extends ProductEntity {}

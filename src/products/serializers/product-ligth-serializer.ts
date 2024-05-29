@@ -13,9 +13,12 @@ export class ProductLightSerializer implements IProductLight {
 
   @Transform(fromCentsToNormal)
   price!: number;
+
   discountPercentage!: number;
+
   @Transform(fromCentsToNormal)
   rating!: number;
+
   stock!: number;
   brand!: string;
   category!: 'electronics' | 'clothing' | 'furniture' | 'books';
@@ -25,6 +28,9 @@ export class ProductLightSerializer implements IProductLight {
 
   @Exclude()
   thumbnail!: string;
+
+  @Exclude()
+  available!: boolean | null;
 
   @Expose()
   get discountedPrice(): number {

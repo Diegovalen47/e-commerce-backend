@@ -16,13 +16,21 @@ $ cd ..
 ## Run environment
 
 ```bash
-$ pnpm run start:dev // start the server
+$ docker-compose up -d // start postgres and pgadmin
 $ pnpm drizzle-kit studio // start drizzle studio
+$ pnpm run start:dev // start the server
 ```
-
 pgadmin: http://localhost:5050/
 drizzle studio: https://local.drizzle.studio/
-api/docs: host:port/api-docs
+api docs: http://localhost:port/api
+
+## Run migrations when changes are made to the model
+
+```bash
+$ pnpm drizzle-kit generate // generate migrations/creation SQL files
+$ pnpm tsx db/scripts/migrate.ts // Apply migrations/creations in the database
+```
+
 
 
 

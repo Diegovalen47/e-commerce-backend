@@ -1,5 +1,5 @@
-import { count, eq } from 'drizzle-orm';
-import { Injectable } from '@nestjs/common';
+import { count, eq, and } from 'drizzle-orm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { DrizzleService } from 'src/drizzle/drizzle.service';
@@ -28,11 +28,14 @@ export class ProductsService {
       page,
       lastPage
     }
-    
+
     const data: ProductEntity[] = 
       await this.drizzle.db
         .select()
         .from(this.drizzle.schema.product)
+        .where(
+          eq(this.drizzle.schema.product.available, true)
+        )
         .limit(limit)
         .offset((page - 1) * limit)
 
@@ -48,32 +51,71 @@ export class ProductsService {
       .select()
       .from(this.drizzle.schema.product)
       .where(
-        eq(this.drizzle.schema.product.id, id)
+        and(
+          eq(this.drizzle.schema.product.id, id),
+          eq(this.drizzle.schema.product.available, true)
+        )
       );
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return this.drizzle.db
+  async update(id: number, updateProductDto: UpdateProductDto) {
+
+    const result = await this.drizzle.db
       .update(this.drizzle.schema.product)
       .set(updateProductDto)
       .where(
         eq(this.drizzle.schema.product.id, id)
       )
-      .returning();
+      .returning()
+
+    if (result.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return result;
   }
 
-  remove(id: number) {
-    return this.drizzle.db
+  async remove(id: number) {
+
+    const result = await this.drizzle.db
       .delete(this.drizzle.schema.product)
       .where(
         eq(this.drizzle.schema.product.id, id)
       )
-      .returning();
+      .returning()
+
+    if (result.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return result;
+  }
+
+  async softRemove(id: number) {
+      
+    const result = await this.drizzle.db
+      .update(this.drizzle.schema.product)
+      .set({ available: false })
+      .where(
+        eq(this.drizzle.schema.product.id, id)
+      )
+      .returning()
+
+    if (result.length === 0) {
+      throw new NotFoundException();
+    }
+
+    return result;
   }
 
   async getTotalProducts() {
     return (
-      await this.drizzle.db.select({ count: count() }).from(this.drizzle.schema.product)
+      await this.drizzle.db
+        .select({ count: count() })
+        .from(this.drizzle.schema.product)
+        .where(
+          eq(this.drizzle.schema.product.available, true)
+        )
     )[0].count;
   }
 }

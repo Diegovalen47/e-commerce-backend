@@ -7,14 +7,13 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  HttpStatus,
   Query
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductLightSerializer } from './serializers/product-ligth-serializer';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiResponse, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PaginationDto, ResposeAllSerializer } from 'src/common';
 
 @Controller({
@@ -26,12 +25,36 @@ export class ProductsController {
 
   @Post()
   @ApiTags('products')
+  @ApiOperation({ summary: 'Create new product' })
+  @ApiResponse({ 
+    status: 201, 
+    description: 'The record has been successfully created.'
+  })
+  @ApiBody({
+    type: CreateProductDto,
+    description: 'JSON structrure to create a new product'
+  })
   async create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @Get()
   @ApiTags('products')
+  @ApiOperation({ summary: 'List all available products' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+    example: 1
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Items per page',
+    example: 10
+  })
   async findAll(
     @Query() paginationDto: PaginationDto
   ): Promise<ResposeAllSerializer<ProductLightSerializer>> {
@@ -47,38 +70,33 @@ export class ProductsController {
 
   @Get(':id')
   @ApiTags('products')
-  findOne(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-  ) {
+  @ApiOperation({ summary: 'Get a product by its id if its available' })
+  findOne(@Param('id', ParseIntPipe)id: number) {
     return this.productsService.findOne(id);
   }
 
   @Patch(':id')
   @ApiTags('products')
-  update(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-    @Body() updateProductDto: UpdateProductDto,
-  ) {
+  @ApiOperation({ summary: 'Update a product by its id' })
+  @ApiBody({
+    type: UpdateProductDto,
+    description: 'JSON structrure to update an existing product'
+  })
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto);
   }
 
   @Delete(':id')
   @ApiTags('products')
-  remove(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-  ) {
+  @ApiOperation({ summary: 'Hard deletes a product fromt the database' })
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
+  }
+
+  @Delete(':id/soft')
+  @ApiTags('products')
+  @ApiOperation({ summary: 'Soft deletes a product, only set available = false' })
+  softRemove(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.softRemove(id);
   }
 }
