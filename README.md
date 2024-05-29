@@ -1,6 +1,11 @@
 ## Description
 
 Backend for the [e-commerce-app](https://github.com/Diegovalen47/e-commerce-app) client project. This project is a REST API built with NestJS and drizzle ORM. It also comes with a docker-compose file with a postgres and pgadmin to manage the storage locally.
+It requires:
+  - node version lts/hydrogen
+  - pnpm
+  - docker
+  - docker-compose
 
 ## Installation
 
